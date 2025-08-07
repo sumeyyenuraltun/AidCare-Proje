@@ -1,9 +1,15 @@
+using AidCare.DataAccess.Concrete.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddDbContext<AidCareDbContext>(option=>option.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AidCare.DataAccess\AidCare.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
