@@ -18,8 +18,4 @@
     <ProjectReference Include="..\AidCare.Business\AidCare.Business.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
