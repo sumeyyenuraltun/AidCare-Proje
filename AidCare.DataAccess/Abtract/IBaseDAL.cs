@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace AidCare.DataAccess.Abtract
 {
-    public interface IUserDAL :IBaseDAL<User>
+    public interface IBaseDAL<TEntity> where TEntity: class
     {
-      
-
+        void Add(TEntity entity);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
+        List<TEntity> GetAll();
     }
 }

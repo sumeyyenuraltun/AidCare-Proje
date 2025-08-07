@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace AidCare.DataAccess.Abtract
 {
-    public interface IBloodGlucoseDAL
+    public interface IBloodGlucoseDAL: IBaseDAL<BloodGlucose>
     {
-        void Add(BloodGlucose bloodGlucose);
-        void Update(BloodGlucose bloodGlucose);
-        void Delete(BloodGlucose bloodGlucose);
-        List<BloodGlucose> GetAll();
+       
     }
 }

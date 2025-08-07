@@ -9,34 +9,13 @@ using AidCare.Entities.Entity;
 
 namespace AidCare.DataAccess.Concrete.Repository
 {
-    public class BloodGlucoseRepository : IBloodGlucoseDAL
+    public class BloodGlucoseRepository : BaseRepository<BloodGlucose>, IBloodGlucoseDAL
     {
-        private readonly AidCareDbContext _context;
-        public BloodGlucoseRepository(AidCareDbContext context)
+       
+        public BloodGlucoseRepository(AidCareDbContext context): base(context)
         {
-            _context = context;
+       
         }
-        public void Add(BloodGlucose bloodGlucose)
-        {
-            _context.BloodGlucoses.Add(bloodGlucose);
-            _context.SaveChanges();
-        }
-
-        public void Delete(BloodGlucose bloodGlucose)
-        {
-            _context.BloodGlucoses.Remove(bloodGlucose);
-            _context.SaveChanges();
-        }
-
-        public List<BloodGlucose> GetAll()
-        {
-            return _context.BloodGlucoses.ToList();
-        }
-
-        public void Update(BloodGlucose bloodGlucose)
-        {
-            _context.BloodGlucoses.Update(bloodGlucose);
-            _context.SaveChanges();
-        }
+       
     }
 }
