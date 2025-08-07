@@ -1,4 +1,5 @@
-﻿using AidCare.DataAccess.Abtract;
+﻿using AidCare.Business.Abstract;
+using AidCare.DataAccess.Abtract;
 using AidCare.DataAccess.Concrete.Context;
 using AidCare.DataAccess1.Repository;
 using AidCare.Entities.Entity;
@@ -10,21 +11,31 @@ using System.Threading.Tasks;
 
 namespace AidCare.Business.Concrete
 {
-    public class UserManager
+    public class UserManager : IUserService
     {
         private readonly IUserDAL _userDAL;
         public UserManager(IUserDAL userDAL)
         {
             _userDAL = userDAL;
         }
-        public void Add(User user)
+        public void Add(User entity)
         {
-            _userDAL.Add(user);
+            _userDAL.Add(entity);
         }
 
-        public void Delete(User user)
+        public void Delete(User entity)
         {
-            _userDAL.Delete(user);
+            _userDAL.Delete(entity);
+        }
+
+        public List<User> GetAll()
+        {
+            return _userDAL.GetAll();
+        }
+
+        public void Update(User entity)
+        {
+           _userDAL.Update(entity);
         }
     }
 }
