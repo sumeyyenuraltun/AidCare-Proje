@@ -10,27 +10,16 @@ namespace AidCare.Entities.Entity
 {
     public class User: BaseEntity
     {
-        public User()
-        {
-            TcNo = string.Empty;
-            FirstName = string.Empty;
-            LastName = string.Empty;
-            Email = string.Empty;
-            PhoneNumber = string.Empty;
-        }
 
-        [Required(ErrorMessage = "TC Kimlik Numarası gereklidir.")]
-        [StringLength(11, ErrorMessage = "TC Kimlik Numarası 11 karakter olmalıdır.")]
-        public string TcNo { get; set; }
-        [Required(ErrorMessage = "Ad gereklidir.")]
-        [StringLength(50, ErrorMessage = "Ad 50 karakterden uzun olmamalıdır.")]
-        public string FirstName { get; set; }
-        [Required(ErrorMessage ="Soyad gereklidir")]
-        [StringLength(50, ErrorMessage = "Soyad 50 karakterden uzun olmamalıdır.")]
-        public string LastName { get; set; }
+
+        public string TcNo { get; set; } = string.Empty;
+
+        public string FirstName { get; set; } = string.Empty;
+
+        public string LastName { get; set; } = string.Empty;
         public string FullName => string.Join(" ", FirstName, LastName);
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
         public decimal? Weight { get; set; }
         public int? Height { get; set; }
         public Gender? gender { get; set; }

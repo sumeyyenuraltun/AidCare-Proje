@@ -1,4 +1,5 @@
-﻿using AidCare.Entities.Entity;
+﻿using AidCare.DataAccess.Concrete.Configurations;
+using AidCare.Entities.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,14 @@ namespace AidCare.DataAccess.Concrete.Context
     {
         public AidCareDbContext(DbContextOptions<AidCareDbContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new UserConfigurations());
+            modelBuilder.ApplyConfiguration(new BloodGlucoseConfigurations());
         }
 
         public DbSet<User> Users { get; set; }
