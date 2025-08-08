@@ -1,42 +1,54 @@
 ﻿using AidCare.Business.Abstract;
+using AidCare.Business.Concrete.DTOs.BloodGlucoses;
 using AidCare.DataAccess.Abtract;
-using AidCare.DataAccess.Concrete.Context;
 using AidCare.Entities.Entity;
-using System;
+using AutoMapper;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AidCare.Business.Concrete
 {
     public class BloodGlucoseManager : IBloodGlucoseService
     {
         private readonly IBloodGlucoseDAL _bloodGlucoseDAL;
+        private readonly IMapper _mapper;
 
-        public BloodGlucoseManager(IBloodGlucoseDAL bloodGlucoseDAL)
+        public BloodGlucoseManager(IBloodGlucoseDAL bloodGlucoseDAL, IMapper mapper)
         {
             _bloodGlucoseDAL = bloodGlucoseDAL;
+            _mapper = mapper;
         }
 
-        public void Add(BloodGlucose entity)
+        public void Add(AddBloodGlucoseDTO addDTO)
         {
-            _bloodGlucoseDAL.Add(entity);
+            var bloodGlucose = _mapper.Map<BloodGlucose>(addDTO);
+            _bloodGlucoseDAL.Add(bloodGlucose);
         }
 
-        public void Delete(BloodGlucose entity)
+        public void Delete(int id)
         {
-            _bloodGlucoseDAL.Delete(entity);
+            var bloodGlucose = _bloodGlucoseDAL.GetById(id);
+            if (bloodGlucose != null)
+            {
+                _bloodGlucoseDAL.Delete(bloodGlucose);
+            }
         }
 
-        public List<BloodGlucose> GetAll()
+        public BloodGlucoseDTO GetById(int id)
         {
-           return _bloodGlucoseDAL.GetAll();
+            var bloodGlucose = _bloodGlucoseDAL.GetById(id);
+            return _mapper.Map<BloodGlucoseDTO>(bloodGlucose);
         }
 
-        public void Update(BloodGlucose entity)
+        public List<BloodGlucoseDTO> GetAll()
         {
-            _bloodGlucoseDAL.Update(entity);
+            var list = _bloodGlucoseDAL.GetAll();
+            return _mapper.Map<List<BloodGlucoseDTO>>(list);
+        }
+
+        public void Update(UpdateBloodGlucoseDTO updateBloodGlucoseDTO)
+        {
+            var bloodGlucose = _mapper.Map<BloodGlucose>(updateBloodGlucoseDTO);
+            _bloodGlucoseDAL.Update(bloodGlucose);
         }
     }
 }
