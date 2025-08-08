@@ -1,8 +1,10 @@
 ﻿using AidCare.Business.Abstract;
+using AidCare.Business.Concrete.DTOs.Users;
 using AidCare.DataAccess.Abtract;
 using AidCare.DataAccess.Concrete.Context;
 using AidCare.DataAccess1.Repository;
 using AidCare.Entities.Entity;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,28 +16,45 @@ namespace AidCare.Business.Concrete
     public class UserManager : IUserService
     {
         private readonly IUserDAL _userDAL;
-        public UserManager(IUserDAL userDAL)
+        private readonly IMapper _mapper;
+
+        public UserManager(IUserDAL userDAL, IMapper mapper)
         {
             _userDAL = userDAL;
-        }
-        public void Add(User entity)
-        {
-            _userDAL.Add(entity);
+            _mapper = mapper;
         }
 
-        public void Delete(User entity)
+        public void Add(AddUserDTO addUserDTO)
         {
-            _userDAL.Delete(entity);
+            var user = _mapper.Map<User>(addUserDTO);
+            _userDAL.Add(user);
         }
 
-        public List<User> GetAll()
+        public void Update(UpdateUserDTO updateUserDTO)
         {
-            return _userDAL.GetAll();
+            var user = _mapper.Map<User>(updateUserDTO);
+            _userDAL.Update(user);
         }
 
-        public void Update(User entity)
+        public void Delete(int id)
         {
-           _userDAL.Update(entity);
+            var user = _userDAL.GetById(id);
+            if (user != null)
+            {
+                _userDAL.Delete(user);
+            }
+        }
+
+        public UserDTO GetById(int id)
+        {
+            var user = _userDAL.GetById(id);
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        public List<UserDTO> GetAll()
+        {
+            var users = _userDAL.GetAll();
+            return _mapper.Map<List<UserDTO>>(users);
         }
     }
 }

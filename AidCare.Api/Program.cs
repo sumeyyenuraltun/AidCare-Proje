@@ -1,5 +1,7 @@
+using AidCare.API.Filters;
 using AidCare.Business.Abstract;
 using AidCare.Business.Concrete;
+using AidCare.Business.Concrete.Mapping;
 using AidCare.DataAccess.Abtract;
 using AidCare.DataAccess.Concrete.Context;
 using AidCare.DataAccess1.Repository;
@@ -16,6 +18,13 @@ builder.Services.AddDbContext<AidCareDbContext>(option=>option.UseNpgsql(builder
 
 builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IUserDAL, UserRepository>();
+
+builder.Services.AddAutoMapper(typeof(MapProfile).Assembly);
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
+
 
 builder.Services.AddOpenApi();
 

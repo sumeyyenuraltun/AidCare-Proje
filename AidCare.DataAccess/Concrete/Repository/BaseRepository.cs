@@ -4,12 +4,13 @@ using AidCare.Entities.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AidCare.DataAccess.Concrete.Repository
 {
-    public class BaseRepository<TEntity> : IBaseDAL<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IBaseDAL<TEntity> where TEntity : BaseEntity
     {
         private readonly AidCareDbContext _context;
 
@@ -38,6 +39,21 @@ namespace AidCare.DataAccess.Concrete.Repository
         public List<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();
+        }
+
+        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter)
+        {
+            return _context.Set<TEntity>().Where(filter).ToList();
+        }
+
+        public TEntity Get(Expression<Func<TEntity, bool>> filter)
+        {
+            return _context.Set<TEntity>().FirstOrDefault(filter);
+        }
+
+        public TEntity GetById(int id)
+        {
+            return _context.Set<TEntity>().Find(id);
         }
     }
 }
