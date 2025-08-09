@@ -1,6 +1,7 @@
 ﻿using AidCare.Business.Abstract;
 using AidCare.Business.Concrete.DTOs.BloodGlucoses;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AidCare.Api.Controllers
 {
@@ -16,14 +17,14 @@ namespace AidCare.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<List<BloodGlucoseDTO>> GetAll()
         {
             var result = _bloodGlucoseService.GetAll();
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public ActionResult<BloodGlucoseDTO> GetById(int id)
         {
             var result = _bloodGlucoseService.GetById(id);
             if (result == null)
@@ -33,24 +34,36 @@ namespace AidCare.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] AddBloodGlucoseDTO dto)
+        public ActionResult<BloodGlucoseDTO> Add([FromBody] AddBloodGlucoseDTO dto)
         {
             _bloodGlucoseService.Add(dto);
-            return Ok("Kan şekeri verisi eklendi.");
+            return StatusCode(201, "Kan şekeri verisi eklendi.");
+
         }
 
-        [HttpPut]
-        public IActionResult Update([FromBody] UpdateBloodGlucoseDTO dto)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] UpdateBloodGlucoseDTO dto)
         {
+            if (id != dto.Id)
+                return BadRequest("Id in URL ile body uyuşmuyor.");
+
+            var existing = _bloodGlucoseService.GetById(id);
+            if (existing == null)
+                return NotFound();
+
             _bloodGlucoseService.Update(dto);
-            return Ok("Kan şekeri verisi güncellendi.");
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var existing = _bloodGlucoseService.GetById(id);
+            if (existing == null)
+                return NotFound();
+
             _bloodGlucoseService.Delete(id);
-            return Ok("Kan şekeri verisi silindi.");
+            return Ok("Başarıyla silindi");
         }
     }
 }

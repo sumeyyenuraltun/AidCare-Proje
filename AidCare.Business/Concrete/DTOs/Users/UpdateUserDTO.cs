@@ -13,11 +13,14 @@ namespace AidCare.Business.Concrete.DTOs.Users
 
         public int Id { get; set; }
 
-  
+        [Required(ErrorMessage = "TcNo alanı zorunludur.")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "TcNo 11 karakter olmalıdır.")]
         public string TcNo { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Ad alanı zorunludur.")]
         public string FirstName { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Soyaad alanı zorunludur.")]
         public string LastName { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;

@@ -11,7 +11,6 @@ namespace AidCare.Business.Concrete.DTOs.BloodGlucoses
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public string UserFullName { get; set; }
         public DateTime MeasurementDate { get; set; }
         public MeasurementType MeasurementType { get; set; }
         public decimal MeasurementValue { get; set; }

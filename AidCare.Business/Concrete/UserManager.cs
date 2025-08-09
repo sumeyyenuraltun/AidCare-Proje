@@ -32,8 +32,13 @@ namespace AidCare.Business.Concrete
 
         public void Update(UpdateUserDTO updateUserDTO)
         {
-            var user = _mapper.Map<User>(updateUserDTO);
-            _userDAL.Update(user);
+            var existingUser = _userDAL.GetById(updateUserDTO.Id);
+            if (existingUser == null)
+                throw new Exception("Kullanıcı bulunamadı.");
+
+            _mapper.Map(updateUserDTO, existingUser);
+
+            _userDAL.Update(existingUser);
         }
 
         public void Delete(int id)

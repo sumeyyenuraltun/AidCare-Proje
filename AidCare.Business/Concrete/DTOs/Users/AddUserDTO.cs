@@ -11,6 +11,7 @@ namespace AidCare.Business.Concrete.DTOs.Users
     public class AddUserDTO
     {
         [Required(ErrorMessage = "TcNo alanı zorunludur.")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "TcNo 11 karakter olmalıdır.")]
         public string TcNo { get; set; } = string.Empty;
         [Required(ErrorMessage = "İsim alanı zorunludur.")]
         public string FirstName { get; set; } = string.Empty;
@@ -26,6 +27,7 @@ namespace AidCare.Business.Concrete.DTOs.Users
         public int? Height { get; set; }
 
         public Gender? Gender { get; set; }
+        public DateTime? BirthDate { get; set; }
 
     }
 

@@ -1,9 +1,7 @@
 ﻿using AidCare.Business.Abstract;
 using AidCare.Business.Concrete.DTOs.Users;
-using AidCare.Entities.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 
 namespace AidCare.Api.Controllers
@@ -19,6 +17,22 @@ namespace AidCare.Api.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public ActionResult<List<UserDTO>> GetAll()
+        {
+            var users = _userService.GetAll();
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<UserDTO> GetById(int id)
+        {
+            var user = _userService.GetById(id);
+            return user is null
+                ? NotFound(new { error = "Kullanıcı bulunamadı." })
+                : Ok(user);
+        }
+
         [HttpPost]
         public IActionResult Add([FromBody] AddUserDTO dto)
         {
@@ -28,62 +42,66 @@ namespace AidCare.Api.Controllers
             try
             {
                 _userService.Add(dto);
-                return CreatedAtAction(nameof(GetById), new { id = dto.TcNo }, "Kullanıcı başarıyla eklendi.");
+                return CreatedAtAction(nameof(GetById), new { id = dto.TcNo }, dto);
+
             }
             catch (DbUpdateException ex)
             {
                 var message = ex.InnerException?.Message ?? "";
 
                 if (message.Contains("UIX_User_TcNo"))
-                    return BadRequest("Bu TC numarasına sahip bir kullanıcı zaten mevcut.");
+                    return BadRequest(new { error = "Bu TC numarasına sahip bir kullanıcı zaten mevcut." });
 
                 if (message.Contains("UIX_User_Email"))
-                    return BadRequest("Bu e-posta adresi zaten kayıtlı.");
+                    return BadRequest(new { error = "Bu e-posta adresi zaten kayıtlı." });
 
                 if (message.Contains("UIX_User_PhoneNumber"))
-                    return BadRequest("Bu telefon numarası zaten kayıtlı.");
+                    return BadRequest(new { error = "Bu telefon numarası zaten kayıtlı." });
 
-                return BadRequest("Veritabanı hatası oluştu.");
+                return BadRequest(new { error = "Veritabanı hatası oluştu." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+                return StatusCode(500, new { error = $"Sunucu hatası: {ex.Message}" });
             }
         }
 
-        [HttpPut]
-        public IActionResult Update([FromBody] UpdateUserDTO dto)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] UpdateUserDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (id != dto.Id)
+                return BadRequest(new { error = "ID uyuşmuyor." });
+
             try
             {
-                var existingUser = _userService.GetById(dto.Id);
+                var existingUser = _userService.GetById(id);
                 if (existingUser == null)
-                    return NotFound("Güncellenmek istenen kullanıcı bulunamadı.");
+                    return NotFound(new { error = "Güncellenmek istenen kullanıcı bulunamadı." });
 
                 _userService.Update(dto);
-                return Ok("Kullanıcı başarıyla güncellendi.");
+                return NoContent();
             }
             catch (DbUpdateException ex)
             {
                 var message = ex.InnerException?.Message ?? "";
 
                 if (message.Contains("UIX_User_TcNo"))
-                    return BadRequest("Bu TC numarasına sahip başka bir kullanıcı zaten mevcut.");
+                    return BadRequest(new { error = "Bu TC numarasına sahip başka bir kullanıcı zaten mevcut." });
 
                 if (message.Contains("UIX_User_Email"))
-                    return BadRequest("Bu e-posta adresi başka bir kullanıcı tarafından kullanılıyor.");
+                    return BadRequest(new { error = "Bu e-posta adresi başka bir kullanıcı tarafından kullanılıyor." });
 
                 if (message.Contains("UIX_User_PhoneNumber"))
-                    return BadRequest("Bu telefon numarası başka bir kullanıcı tarafından kullanılıyor.");
+                    return BadRequest(new { error = "Bu telefon numarası başka bir kullanıcı tarafından kullanılıyor." });
 
-                return BadRequest("Veritabanı hatası oluştu.");
+                return BadRequest(new { error = "Veritabanı hatası oluştu." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+                return StatusCode(500, new { error = $"Sunucu hatası: {ex.Message}" });
             }
         }
 
@@ -94,45 +112,15 @@ namespace AidCare.Api.Controllers
             {
                 var existingUser = _userService.GetById(id);
                 if (existingUser == null)
-                    return NotFound("Silinmek istenen kullanıcı bulunamadı.");
+                    return NotFound(new { error = "Silinmek istenen kullanıcı bulunamadı." });
 
                 _userService.Delete(id);
-                return Ok("Kullanıcı başarıyla silindi.");
+                return Ok(new { message = "Kullanıcı başarıyla silindi." });
+
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-            }
-        }
-
-        [HttpGet]
-        public ActionResult<List<UserDTO>> GetAll()
-        {
-            try
-            {
-                var users = _userService.GetAll();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-            }
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<UserDTO> GetById(int id)
-        {
-            try
-            {
-                var user = _userService.GetById(id);
-                if (user == null)
-                    return NotFound("Kullanıcı bulunamadı.");
-
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+                return StatusCode(500, new { error = $"Sunucu hatası: {ex.Message}" });
             }
         }
     }

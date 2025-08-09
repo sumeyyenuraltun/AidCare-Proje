@@ -1,4 +1,5 @@
-﻿using AidCare.Business.Concrete.DTOs.Users;
+﻿using AidCare.Business.Concrete.DTOs.BloodGlucoses;
+using AidCare.Business.Concrete.DTOs.Users;
 using AidCare.Entities.Entity;
 using AutoMapper;
 using System;
@@ -17,6 +18,10 @@ namespace AidCare.Business.Concrete.Mapping
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<User, AddUserDTO>().ReverseMap();
             CreateMap<User, UpdateUserDTO>().ReverseMap();
+
+            CreateMap<BloodGlucose, BloodGlucoseDTO>().ReverseMap();
+            CreateMap<BloodGlucose, AddBloodGlucoseDTO>().ReverseMap();
+            CreateMap<BloodGlucose, UpdateBloodGlucoseDTO>().ReverseMap();
         }
     }
 }

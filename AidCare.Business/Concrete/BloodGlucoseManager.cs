@@ -47,8 +47,14 @@ namespace AidCare.Business.Concrete
 
         public void Update(UpdateBloodGlucoseDTO updateBloodGlucoseDTO)
         {
-            var bloodGlucose = _mapper.Map<BloodGlucose>(updateBloodGlucoseDTO);
-            _bloodGlucoseDAL.Update(bloodGlucose);
+            var existingBloodGlucose = _bloodGlucoseDAL.GetById(updateBloodGlucoseDTO.Id);
+            if (existingBloodGlucose == null)
+                throw new Exception("Kan şekeri ölçümü bulunamadı.");
+
+            _mapper.Map(updateBloodGlucoseDTO, existingBloodGlucose);
+
+            _bloodGlucoseDAL.Update(existingBloodGlucose);
         }
+
     }
 }

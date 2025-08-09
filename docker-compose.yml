@@ -1,0 +1,6 @@
+services:
+  aidcare.api:
+    image: ${DOCKER_REGISTRY-}aidcareapi
+    build:
+      context: .
+      dockerfile: AidCare.Api/Dockerfile

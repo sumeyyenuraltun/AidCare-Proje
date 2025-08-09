@@ -4,6 +4,7 @@ using AidCare.Business.Concrete;
 using AidCare.Business.Concrete.Mapping;
 using AidCare.DataAccess.Abtract;
 using AidCare.DataAccess.Concrete.Context;
+using AidCare.DataAccess.Concrete.Repository;
 using AidCare.DataAccess1.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,8 @@ builder.Services.AddDbContext<AidCareDbContext>(option=>option.UseNpgsql(builder
 
 builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IUserDAL, UserRepository>();
-
+builder.Services.AddScoped<IBloodGlucoseService,BloodGlucoseManager>();
+builder.Services.AddScoped<IBloodGlucoseDAL, BloodGlucoseRepository>();
 builder.Services.AddAutoMapper(typeof(MapProfile).Assembly);
 builder.Services.AddControllers(options =>
 {
